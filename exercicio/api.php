@@ -47,12 +47,30 @@
             break;
         case 'POST':
             //lógica para POST
+            if ($terceiraparte == 'alunos'){
+                insere_aluno();
+            }
+            elseif ($terceiraparte == 'cursos'){
+                insere_curso();
+            }
             break;
         case 'PUT':
             //lógica para PUT
+            if ($terceiraparte == 'alunos'){
+                atualiza_aluno();
+            }
+            elseif ($terceiraparte == 'cursos') {
+                atualiza_curso();
+            }
             break;
         case 'DELETE':
             //lógica para o DELETE
+            if ($terceiraparte == 'alunos'){
+                remove_aluno();
+            }
+            elseif ($terceiraparte == 'cursos') {
+                remove_curso();
+            }
             break;
         default:
             echo json_encode(
@@ -137,6 +155,67 @@
         }
 
         
+    }
+
+    function insere_curso(){
+        global $conexao;
+        $input = json_decode(file_get_contents('php://input'), true);
+        $nome_curso = $input['nome_curso'];
+
+        $sql = "INSERT INTO cursos (nome_curso) VALUES ('$nome_curso')";
+
+        if ($conexao -> query ($sql) == TRUE){
+            echo json_encode([
+                'mensagem' => 'CURSO CADASTRADO'
+            ])
+        }
+        else{
+            echo json_encode([
+                'mensagem' => 'ERRO'
+            ])
+        }
+    }
+
+    function insere_aluno(){
+        global $conexao;
+        $input = json_decode(file_get_contents('php://input'), true);
+        $id_curso = $input['fk_cursos_id_curso'];
+        $nome = $input['nome'];
+        $email = $input['email'];
+
+        $sql = "INSERT INTO alunos (nome, email, fk_cursos_id_curso) VALUES ('$nome', '$email', '$id_curso')";
+
+        if ($conexao -> query ($sql) == TRUE){
+            echo json_encode([
+                'mensagem' => 'ALUNO CADASTRADO'
+            ])
+        }
+        else{
+            echo json_encode([
+                'mensagem' => 'ERRO'
+            ])
+        }
+    }
+
+    function atualiza_aluno(){
+        global $conexao;
+        $input = json_decode(file_get_contents('php://input'), true);
+        $id = $input['id'];
+        $nome_novo = $input['nome_novo'];
+        $email_novo = $input['email_novo'];
+
+        $sql = "UPDATE alunos SET nome = '$nome_novo";
+
+        if ($conexao -> query ($sql) == TRUE){
+            echo json_encode([
+                'mensagem' => 'ALUNO CADASTRADO'
+            ])
+        }
+        else{
+            echo json_encode([
+                'mensagem' => 'ERRO'
+            ])
+        }
     }
 
 
